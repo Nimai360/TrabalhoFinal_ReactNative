@@ -1,15 +1,31 @@
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Image } from "react-native";
 import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
 import Skill from "../../components/skill";
-import React from "react";
-
-var profileImageUri = {
-  //   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
-  uri: "https://avatars.mds.yandex.net/get-mpic/5253050/img_id6703807053537370546.jpeg/14hq",
-};
+import { getFotoPersonagensAPI } from "../../services/requestUser";
 
 export default function Character() {
+  const [profileImageUri, setProfileImageUri] = useState({ uri: "" });
+
+  useEffect(() => {
+    loadFoto();
+  }, []);
+
+  function loadFoto() {
+    getFotoPersonagensAPI()
+      .then((response) => {
+        if (response !== null) {
+          setProfileImageUri({ uri: response["ladrao"] });
+        } else {
+          console.error("Usuário não encontrado");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro inesperado:", error);
+      });
+  }
+
   return (
     <View style={GlobalStyles.container}>
       <View style={styles.container}>
@@ -19,7 +35,7 @@ export default function Character() {
         <Text style={styles.title}>CAPYBARA</Text>
         <Text style={styles.pointsSkill}>100</Text>
       </View>
-        <View style={styles.divider}></View>
+      <View style={styles.divider}></View>
 
       <ScrollView
         style={styles.containerScroll}

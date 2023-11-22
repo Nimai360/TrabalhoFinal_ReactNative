@@ -5,8 +5,8 @@ import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
 import GoBackArrow from "../../components/goBackArrow";
 import { Title_Subtitle } from "../../components/title_subtitle";
-
 import ImgFlagButton from "../../assets/img/flagButton.png";
+import { getMapaAPI } from "../../services/requestUser";
 
 import { Button2 } from "../../components/button2";
 
@@ -16,19 +16,42 @@ var profileImageUri = {
 };
 
 export default function MainGame() {
+  const [mapa, setMapa] = useState([]);
+  const [mapaAtual, setMapaAtual] = useState([]);
+
+  useEffect(() => {
+    loadMapa();
+  }, []);
+
+  function loadMapa() {
+    getMapaAPI()
+      .then((response) => {
+        if (response !== null) {
+          // console.log(response['mapas']);
+          setMapa(response);
+          setMapaAtual(response['mapas'][0]);
+        } else {
+          console.error("Usuário não encontrado");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro inesperado:", error);
+      });
+  }
+
   return (
     <ImageBackground source={profileImageUri} style={GlobalStyles.backgroundImage}>
       <View style={GlobalStyles.containerImg}>
         <GoBackArrow />
 
         <Title_Subtitle
-          title={"FASE 1"}
-          subtitle="Você acordou em uma floresta escura, totalmente desorientado. A sua frente tem uma floresta para se aventurar e ao seu lado uns gravetos."
+          title={`FASE ${mapaAtual['idMapa']}`}
+          subtitle={mapaAtual['descriptionMapa']}
         />
 
-        <Button2 title="Siga floresta a dentro" irParaPagina={() => {}} />
+        <Button2 title={mapaAtual['opcao1']['descriptionOpcao1']} irParaPagina={() => {}} />
         <Button2
-          title="Faça um arco e flecha com os gravetos"
+          title={mapaAtual['opcao2']['descriptionOpcao2']}
           irParaPagina={() => {}}
         />
       </View>

@@ -7,7 +7,7 @@ import { Button } from "../../components/button";
 import { TextoInput } from "../../components/textInput";
 import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
-import { setUsuarioAPI } from "../../services/requestUser";
+import { postUsuarioAPI } from "../../services/requestUser";
 
 var profileImageUri = {
   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
@@ -24,7 +24,7 @@ export default function Register() {
   }
 
   function handleWaitScreen(usuario: string, email: string, senha: string) {
-    setUsuarioAPI(usuario, email, senha)
+    postUsuarioAPI(usuario, email, senha)
       .then((response) => {
         if (response !== null) {
           navigation.navigate("StackMainGame");

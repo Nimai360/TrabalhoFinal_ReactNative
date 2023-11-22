@@ -23,6 +23,8 @@ export default function Login() {
   }
 
   function handleWaitScreen(email: string, senha: string) {
+    navigation.navigate("StackMainGame");
+    return false;
     getUsuarioAPI(email, senha)
       .then((response) => {
         if (response !== null) {
