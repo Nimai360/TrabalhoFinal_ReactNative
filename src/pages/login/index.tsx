@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
@@ -9,17 +10,30 @@ import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
 import { LoginRedeSocial } from "../../components/loginRedesocial";
 import { Snackbar } from "react-native-paper";
+import { getUsuarioAPI } from "../../services/requestUser";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
   const navigation = useNavigation();
 
   function handleRegister() {
     navigation.navigate("StackRegister");
   }
 
-  function handleEnterGame() {
-    // navigation.navigate("StackWaitScreen");
-    navigation.navigate("StackMainGame");
+  function handleWaitScreen(email: string, senha: string) {
+    getUsuarioAPI(email, senha)
+      .then((response) => {
+        if (response !== null) {
+          navigation.navigate("StackMainGame");
+        } else {
+          console.error("Usuário não encontrado");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro inesperado:", error);
+      });
   }
 
   return (
@@ -32,10 +46,24 @@ export default function Login() {
 
         <LoginRedeSocial />
 
-        <TextoInput placeholder="Usuário" type="user" icon="shield-account" />
-        <TextoInput placeholder="Senha" type="password" />
+        <TextoInput
+          placeholder="Usuário"
+          type="user"
+          icon="shield-account"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextoInput
+          placeholder="Senha"
+          type="password"
+          onChangeText={(text) => setSenha(text)}
+        />
 
-        <Button icon="sword" title="Entrar" irParaPagina={handleEnterGame} />
+        <Button
+          icon="sword"
+          title="Entrar"
+          irParaPagina={() => handleWaitScreen(email, senha)}
+        />
+
         {/* <Button2 title="Entrar" irParaPagina={handleEnterGame} /> */}
       </View>
 

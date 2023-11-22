@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ImageBackground } from "react-native";
 import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
@@ -7,20 +7,34 @@ import { Button } from "../../components/button";
 import { TextoInput } from "../../components/textInput";
 import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
+import { setUsuarioAPI } from "../../services/requestUser";
 
 var profileImageUri = {
   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
 };
 
 export default function Register() {
-  
+  const [usuario, setUsuario] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
   const navigation = useNavigation();
   function handleRegister() {
     navigation.navigate("StackLogin");
   }
 
-  function handleWaitScreen() {
-    navigation.navigate("StackWaitScreen");
+  function handleWaitScreen(usuario: string, email: string, senha: string) {
+    setUsuarioAPI(usuario, email, senha)
+      .then((response) => {
+        if (response !== null) {
+          navigation.navigate("StackMainGame");
+        } else {
+          console.error("Erro ao entrar no jogo");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro inesperado:", error);
+      });
   }
 
   return (
@@ -32,10 +46,28 @@ export default function Register() {
             subtitle="Criando..."
           />
 
-          <TextoInput placeholder="Usuário" type="user" icon="shield-account" />
-          <TextoInput placeholder="E-mail" type="user" icon="shield-star" />
-          <TextoInput placeholder="Senha" type="password" />
-          <Button icon="sword" title="Cadastrar" irParaPagina={handleWaitScreen} />
+          <TextoInput
+            placeholder="Usuário"
+            type="user"
+            icon="shield-account"
+            onChangeText={(text) => setUsuario(text)}
+          />
+          <TextoInput
+            placeholder="E-mail"
+            type="user"
+            icon="shield-star"
+            onChangeText={(text) => setEmail(text)}
+          />
+          <TextoInput
+            placeholder="Senha"
+            type="password"
+            onChangeText={(text) => setSenha(text)}
+          />
+          <Button
+            icon="sword"
+            title="Cadastrar"
+            irParaPagina={() => handleWaitScreen(usuario, email, senha)}
+          />
         </View>
         <Rodape_link
           text="Já possui conta?"

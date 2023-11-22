@@ -31,26 +31,26 @@ export default function TabRoutes() {
         component={MainGame}
         options={{
           tabBarLabel: "JOGO",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ focused, color, size }) => (
             <MaterialCommunityIcons
               name="sword-cross"
               size={24}
-              color={Colors.secondaryColor}
+              color={focused ? Colors.secondaryColor : Colors.textOpacity}
             />
           ),
         }}
       />
 
-      <Tab.Screen
+<Tab.Screen
         name="TabCharacter"
         component={Character}
         options={{
           tabBarLabel: "AVATAR",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="person-circle"
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialCommunityIcons
+              name="account-circle"
               size={24}
-              color={Colors.secondaryColor}
+              color={focused ? Colors.secondaryColor : Colors.textOpacity}
             />
           ),
         }}

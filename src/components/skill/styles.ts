@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     progressBarBg: {
         marginVertical: 10,
         height: 10,
-        width: '100%',
+        // width: '100%',
         backgroundColor: Colors.coplementarPrimaryColor,
         borderRadius: 100,
     },
@@ -51,8 +51,8 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: Colors.secondaryColor,
         borderWidth: 0.5,
-        height: 38,
-        width: 38,
+        height: 40,
+        width: 40,
         borderRadius: 100,
     },
 
@@ -60,6 +60,6 @@ export const styles = StyleSheet.create({
         textAlign: "center",
         justifyContent: 'center',
         color: Colors.textColor,
-        fontSize: 44,
+        fontSize: 20,
     },
 })

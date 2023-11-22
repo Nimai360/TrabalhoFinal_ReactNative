@@ -22,8 +22,13 @@ export default function Skill({ title, points, percent }: skillProps) {
 
         {/* 60% = 100% da barra */}
         <View style={styles.progressBarDiv}>
+          <View
+            style={[
+              styles.progressBarBg,
+              { width: "100%", position: "absolute" },
+            ]}
+          ></View>
           <View style={styles.progressBar} width={percent}></View>
-          <View style={styles.progressBarBg} width={percent}></View>
         </View>
 
         <TouchableOpacity style={styles.btn}>

@@ -7,12 +7,14 @@ interface TextInputProps {
   placeholder: string;
   type: "password" | "user" | "email" | "";
   icon?: string;
+  onChangeText?: (text: string) => void;
 }
 
 export function TextoInput({
   placeholder,
   type = "",
   icon,
+  onChangeText,
   ...rest
 }: TextInputProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -44,6 +46,7 @@ export function TextoInput({
         secureTextEntry={passwordVisible}
         placeholder={placeholder}
         placeholderTextColor="#ffffff21"
+        onChangeText={onChangeText}
       ></TextInput>
     </View>
   );
