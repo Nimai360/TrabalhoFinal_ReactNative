@@ -10,13 +10,33 @@ import { useCharacterContext } from "../../context/characterContext";
 export default function Character() {
   const [profileImageUri, setProfileImageUri] = useState({ uri: "" });
   const [user, setUser] = useState({});
-  // const [qtPontos, setQtPontos] = useState(100);
+  const [qtForca, setQtForca] = useState(5);
+  const [qtStamina, setQtStamina] = useState(2);
+  const [qtDefesa, setQtDefesa] = useState(1);
+  const [qtVelocidade, setQtVelocidade] = useState(2);
+  const [qtDestreza, setQtDestreza] = useState(0);
+  const [qtMagia, setQtMagia] = useState(0);
+  const [qtSorte, setQtSorte] = useState(0);
+  const [qtInteligencia, setQtInteligencia] = useState(0);
+  const [qtTotal, setQtTotal] = useState(0);
+
+
   const { qtPontos } = useCharacterContext();
 
   useEffect(() => {
     loadUserFromAsync();
     loadFoto();
+    somarTotal();
   }, []);
+
+  useEffect(() => {
+    somarTotal();
+  }, [qtPontos]);
+
+  function somarTotal(){
+    var total = qtForca + qtStamina + qtDefesa + qtVelocidade + qtDestreza + qtMagia + qtSorte + qtInteligencia + qtPontos
+    setQtTotal(total);
+  }
 
   function loadFoto() {
     getFotoPersonagensAPI()
@@ -42,6 +62,70 @@ export default function Character() {
       .catch(e => console.error('Erro ao recuperar os dados:', e));
   }
 
+  function onHandlerQtForca(op: string){
+    if(op == 'add'){
+      setQtForca(qtForca + 1)
+    } else if (op == "sub"){
+      setQtForca(qtForca - 1)
+    }
+  }
+
+    function onHandlerQtStamina(op: string){
+    if(op == 'add'){
+      setQtStamina(qtStamina + 1)
+    } else if (op == "sub"){
+      setQtStamina(qtStamina - 1)
+    }
+  }
+
+  function onHandlerQtDefesa(op: string){
+    if(op == 'add'){
+      setQtDefesa(qtDefesa + 1)
+    } else if (op == "sub"){
+      setQtDefesa(qtDefesa - 1)
+    }
+  }
+
+  function onHandlerQtVelocidade(op: string){
+    if(op == 'add'){
+      setQtVelocidade(qtVelocidade + 1)
+    } else if (op == "sub"){
+      setQtVelocidade(qtVelocidade - 1)
+    }
+  }
+
+  function onHandlerQtDestreza(op: string){
+    if(op == 'add'){
+      setQtDestreza(qtDestreza + 1)
+    } else if (op == "sub"){
+      setQtDestreza(qtDestreza - 1)
+    }
+  }
+
+  function onHandlerQtMagia(op: string){
+    if(op == 'add'){
+      setQtMagia(qtMagia + 1)
+    } else if (op == "sub"){
+      setQtMagia(qtMagia - 1)
+    }
+  }
+
+  function onHandlerQtSorte(op: string){
+    if(op == 'add'){
+      setQtSorte(qtSorte + 1)
+    } else if (op == "sub"){
+      setQtSorte(qtSorte - 1)
+    }
+  }
+
+  function onHandlerQtInteligencia(op: string){
+    if(op == 'add'){
+      setQtInteligencia(qtInteligencia + 1)
+    } else if (op == "sub"){
+      setQtInteligencia(qtInteligencia - 1)
+    }
+  }
+
   return (
     <View style={GlobalStyles.container}>
       <View style={styles.container}>
@@ -57,14 +141,14 @@ export default function Character() {
         style={styles.containerScroll}
         showsVerticalScrollIndicator={false}
       >
-        <Skill title="Força" percent="50%" points={50} />
-        <Skill title="Stamina" percent="20%" points={20} />
-        <Skill title="Defesa" percent="10%" points={10} />
-        <Skill title="Velocidade" percent="3%" points={3} />
-        <Skill title="Destreza" percent="5%" points={5} />
-        <Skill title="Magia" percent="7%" points={7} />
-        <Skill title="Sorte" percent="3%" points={3} />
-        <Skill title="Inteligencia" percent="2%" points={2} />
+        <Skill title="Força" percent={(qtForca/qtTotal * 100) + "%"} points={qtForca} alterPoint={onHandlerQtForca} />
+        <Skill title="Stamina" percent={(qtStamina/qtTotal * 100) + "%"} points={qtStamina} alterPoint={onHandlerQtStamina} />
+        <Skill title="Defesa" percent={(qtDefesa/qtTotal * 100) + "%"}points={qtDefesa} alterPoint={onHandlerQtDefesa} />
+        <Skill title="Velocidade" percent={(qtVelocidade/qtTotal * 100) + "%"} points={qtVelocidade} alterPoint={onHandlerQtVelocidade} />
+        <Skill title="Destreza" percent={(qtDestreza/qtTotal * 100) + "%"} points={qtDestreza} alterPoint={onHandlerQtDestreza} />
+        <Skill title="Magia" percent={(qtMagia/qtTotal * 100) + "%"}points={qtMagia} alterPoint={onHandlerQtMagia} />
+        <Skill title="Sorte" percent={(qtSorte/qtTotal * 100) + "%"} points={qtSorte} alterPoint={onHandlerQtSorte} />
+        <Skill title="Inteligencia" percent={(qtInteligencia/qtTotal * 100) + "%"} points={qtInteligencia} alterPoint={onHandlerQtInteligencia} />
       </ScrollView>
     </View>
   );

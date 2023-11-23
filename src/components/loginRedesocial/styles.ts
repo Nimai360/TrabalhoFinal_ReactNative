@@ -3,6 +3,7 @@ import { Colors } from "../../global/styles";
 
 export const styles = StyleSheet.create({
   loginContainer: {
+    marginLeft: 50,
     flexDirection: 'row',
     textAlign: 'center',
     alignSelf: 'center',

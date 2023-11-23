@@ -12,10 +12,12 @@ interface CharacterProviderProps {
 const CharacterContext = createContext<CharacterContextType | undefined>(undefined);
 
 export const CharacterProvider: React.FC<CharacterProviderProps> = ({ children }) => {
-    const [qtPontos, setQtPontos] = useState(100);
+    const [qtPontos, setQtPontos] = useState(5);
 
     return (
-        <CharacterContext.Provider value={{ qtPontos, setQtPontos }}>
+        <CharacterContext.Provider value={{ 
+            qtPontos, setQtPontos
+             }}>
             {children}
         </CharacterContext.Provider>
     );

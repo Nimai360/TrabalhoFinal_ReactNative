@@ -7,20 +7,23 @@ interface skillProps {
   title: string;
   percent: string;
   points: number;
+  alterPoint: any;
 }
 
-export default function Skill({ title, points, percent }: skillProps) {
+export default function Skill({ title, points, percent, alterPoint }: skillProps) {
     const { qtPontos, setQtPontos } = useCharacterContext();
 
   const addPoint = () => {
-    if (qtPontos > 0) {
-      setQtPontos(qtPontos - 1);
+    if (points > 0) {
+      setQtPontos(qtPontos + 1);
+      alterPoint('sub');
     }
   };
 
   const removePoint = () => {
-    if (qtPontos < 100) {
-      setQtPontos(qtPontos + 1);
+    if (qtPontos > 0) {
+      setQtPontos(qtPontos - 1);
+      alterPoint('add');
     }
   };
   return (
