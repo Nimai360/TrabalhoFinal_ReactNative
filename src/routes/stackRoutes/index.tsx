@@ -15,7 +15,6 @@ export default function StackRoutes() {
       <Stack.Screen name="StackRegister" component={Register} />
       <Stack.Screen name="StackWaitScreen" component={WaitScreen} />
       <Stack.Screen name="StackMainGame" component={TabRoutes} />
-      {/* <Stack.Screen name="MainGame" component={TabRoutes} /> */}
     </Stack.Navigator>
   );
 }

@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        height: 80,
+        height: 120,
         marginTop: 30,
     },
 

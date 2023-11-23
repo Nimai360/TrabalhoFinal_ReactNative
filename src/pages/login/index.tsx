@@ -10,7 +10,7 @@ import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
 import { LoginRedeSocial } from "../../components/loginRedesocial";
 import { Snackbar } from "react-native-paper";
-import { setAsyncStorage } from "../../services/asyncStorage";
+import { getAsyncStorage, setAsyncStorage } from "../../services/asyncStorage";
 import { getUsuarioAPI } from "../../services/requestUser";
 
 export default function Login() {
@@ -23,6 +23,25 @@ export default function Login() {
     navigation.navigate("StackRegister");
   }
 
+  function loadUserPointsFromAsync(email) {
+    getAsyncStorage(`${email}-Pontos`)
+      .then(value => {
+        value = value+'';
+        var parsedValue = JSON.parse(value);
+        // console.log(parsedValue);
+
+        if(parsedValue == undefined || parsedValue == null){
+          console.log('Pontos são undefined');
+          // setAsyncStorage(`${email}-Pontos`, 10);
+        }
+  
+        return parsedValue;
+      })
+      .catch(e => 
+        console.error('login - Erro ao recuperar os dados:', e)
+        );
+  }
+
   function handleWaitScreen(email: string, senha: string) {
     email = "nimai@nimai";
     senha = "123456";
@@ -30,6 +49,7 @@ export default function Login() {
       .then((response) => {
         if (response !== null) {
           setAsyncStorage('user', response);
+          loadUserPointsFromAsync(email);
 
           navigation.navigate("StackMainGame");
         } else {

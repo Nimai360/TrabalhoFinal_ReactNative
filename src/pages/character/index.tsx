@@ -4,16 +4,16 @@ import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
 import Skill from "../../components/skill";
 import { getFotoPersonagensAPI } from "../../services/requestUser";
-import { getAsyncStorage } from "../../services/asyncStorage";
+import { getAsyncStorage, setAsyncStorage } from "../../services/asyncStorage";
 import { useCharacterContext } from "../../context/characterContext";
 
 export default function Character() {
   const [profileImageUri, setProfileImageUri] = useState({ uri: "" });
   const [user, setUser] = useState({});
-  const [qtForca, setQtForca] = useState(5);
-  const [qtStamina, setQtStamina] = useState(2);
-  const [qtDefesa, setQtDefesa] = useState(1);
-  const [qtVelocidade, setQtVelocidade] = useState(2);
+  const [qtForca, setQtForca] = useState(0);
+  const [qtStamina, setQtStamina] = useState(0);
+  const [qtDefesa, setQtDefesa] = useState(0);
+  const [qtVelocidade, setQtVelocidade] = useState(0);
   const [qtDestreza, setQtDestreza] = useState(0);
   const [qtMagia, setQtMagia] = useState(0);
   const [qtSorte, setQtSorte] = useState(0);
@@ -21,7 +21,7 @@ export default function Character() {
   const [qtTotal, setQtTotal] = useState(0);
 
 
-  const { qtPontos } = useCharacterContext();
+  const { qtPontos, setQtPontos } = useCharacterContext();
 
   useEffect(() => {
     loadUserFromAsync();
@@ -31,7 +31,44 @@ export default function Character() {
 
   useEffect(() => {
     somarTotal();
+    // loadUserFromAsync();
   }, [qtPontos]);
+
+  function loadUserFromAsync() {
+    return getAsyncStorage("user")
+        .then(value => {
+            value = value + '';
+            const parsedValue = JSON.parse(value);
+            setUser(parsedValue);
+
+            return loadUserPointsFromAsync(parsedValue['email']);
+        })
+        .then(points => {
+            // console.log('points: ' + points);
+            return points;
+        })
+        .catch(e => {
+            console.error('ContextUser - Erro ao recuperar os dados:', e);
+            throw e; // Propagar o erro para que seja tratado externamente, se necessário
+        });
+}
+
+function loadUserPointsFromAsync(email) {
+    return getAsyncStorage(`${email}-Pontos`)
+        .then(value => {
+            value = value + '';
+            const parsedValue = JSON.parse(value);
+            // console.log('ContextPoints - ' + parsedValue);
+            setQtPontos(Number(parsedValue));
+            setAsyncStorage(`${email}-Pontos`, Number(parsedValue));
+
+            return parsedValue;
+        })
+        .catch(e => {
+            console.error('ContextPoints - Erro ao recuperar os dados:', e);
+            throw e; // Propagar o erro para que seja tratado externamente, se necessário
+        });
+}
 
   function somarTotal(){
     var total = qtForca + qtStamina + qtDefesa + qtVelocidade + qtDestreza + qtMagia + qtSorte + qtInteligencia + qtPontos
@@ -51,16 +88,16 @@ export default function Character() {
         console.error("Erro inesperado:", error);
       });
   }
-  function loadUserFromAsync() {
-    getAsyncStorage("user")
-      .then(value => {
-        value = value+'';
-        var parsedValue = JSON.parse(value);
+  // function loadUserFromAsync() {
+  //   getAsyncStorage("user")
+  //     .then(value => {
+  //       value = value+'';
+  //       var parsedValue = JSON.parse(value);
   
-        setUser(parsedValue);
-      })
-      .catch(e => console.error('Erro ao recuperar os dados:', e));
-  }
+  //       setUser(parsedValue);
+  //     })
+  //     .catch(e => console.error('Erro ao recuperar os dados:', e));
+  // }
 
   function onHandlerQtForca(op: string){
     if(op == 'add'){

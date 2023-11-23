@@ -3,25 +3,27 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MainGame from "../../pages/mainGame";
 import Character from "../../pages/character";
 import { Colors } from "../../global/styles";
+import { CharacterProvider } from "../../context/characterContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabRoutes() {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: Colors.primaryColor,
-          borderTopWidth: 2,
-        },
-        tabBarInactiveTintColor: Colors.textOpacity,
-        tabBarActiveTintColor: Colors.secondaryColor,
-        tabBarIconStyle: {
-          marginTop: 5,
-        },
-      }}
-    >
+    <CharacterProvider>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: Colors.primaryColor,
+            borderTopWidth: 2,
+          },
+          tabBarInactiveTintColor: Colors.textOpacity,
+          tabBarActiveTintColor: Colors.secondaryColor,
+          tabBarIconStyle: {
+            marginTop: 5,
+          },
+        }}
+      >
         <Tab.Screen
           name="TabMainGame"
           component={MainGame}
@@ -51,6 +53,7 @@ export default function TabRoutes() {
             ),
           }}
         />
-    </Tab.Navigator>
+      </Tab.Navigator>
+    </CharacterProvider>
   );
 }

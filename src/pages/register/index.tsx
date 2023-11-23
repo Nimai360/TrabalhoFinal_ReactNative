@@ -8,6 +8,7 @@ import { TextoInput } from "../../components/textInput";
 import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
 import { postUsuarioAPI } from "../../services/requestUser";
+import { setAsyncStorage } from "../../services/asyncStorage";
 
 var profileImageUri = {
   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
@@ -27,6 +28,8 @@ export default function Register() {
     postUsuarioAPI(usuario, email, senha)
       .then((response) => {
         if (response !== null) {
+          setAsyncStorage('user', response);
+          setAsyncStorage(`${email}-Pontos`, 10);
           navigation.navigate("StackMainGame");
         } else {
           console.error("Erro ao entrar no jogo");
