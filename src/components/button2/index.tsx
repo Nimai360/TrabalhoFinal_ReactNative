@@ -13,7 +13,7 @@ import ImgFlagButton from "../../assets/img/flagButton.png";
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
   icon?: string;
-  irParaPagina: any;
+  irParaPagina?: any;
 }
 
 export function Button2({ title, irParaPagina, ...rest }: ButtonProps) {

@@ -7,6 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import DrawerRoutes from "./src/routes/drawerRoutes";
 import StackRoutes from "./src/routes/stackRoutes";
 import Routes from "./src/routes";
+import { CharacterProvider } from './src/context/characterContext';
+
 // import  Routes from './src/routes'
 
 export default function App() {
@@ -16,7 +18,9 @@ export default function App() {
         backgroundColor={Colors.primaryColor}
         barStyle="light-content"
       />
-      <Routes />
+      <CharacterProvider>
+        <Routes />
+      </CharacterProvider>
     </>
   );
 }

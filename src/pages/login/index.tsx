@@ -10,6 +10,7 @@ import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
 import { LoginRedeSocial } from "../../components/loginRedesocial";
 import { Snackbar } from "react-native-paper";
+import { setAsyncStorage } from "../../services/asyncStorage";
 import { getUsuarioAPI } from "../../services/requestUser";
 
 export default function Login() {
@@ -23,11 +24,13 @@ export default function Login() {
   }
 
   function handleWaitScreen(email: string, senha: string) {
-    navigation.navigate("StackMainGame");
-    return false;
+    email = "nimai@nimai";
+    senha = "123456";
     getUsuarioAPI(email, senha)
       .then((response) => {
         if (response !== null) {
+          setAsyncStorage('user', response);
+
           navigation.navigate("StackMainGame");
         } else {
           console.error("Usuário não encontrado");

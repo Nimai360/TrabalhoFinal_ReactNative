@@ -11,7 +11,7 @@ import { getMapaAPI } from "../../services/requestUser";
 import { Button2 } from "../../components/button2";
 
 var profileImageUri = {
-    //   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
+  //   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
   uri: "https://avatars.mds.yandex.net/get-mpic/5253050/img_id6703807053537370546.jpeg/14hq",
 };
 
@@ -28,8 +28,9 @@ export default function MainGame() {
       .then((response) => {
         if (response !== null) {
           // console.log(response['mapas']);
-          setMapa(response);
-          setMapaAtual(response['mapas'][0]);
+          setMapa(response['mapas']);
+          // console.log(response['mapas']);
+          setMapaAtual(response['mapas'][0]); 
         } else {
           console.error("Usuário não encontrado");
         }
@@ -38,6 +39,15 @@ export default function MainGame() {
         console.error("Erro inesperado:", error);
       });
   }
+
+  function updateMapaAtual(idMapaParaOndeSeraLevado) {
+    const nextMapa = mapa.find(map => map.idMapa === idMapaParaOndeSeraLevado);
+    if (nextMapa) {
+      setMapaAtual(nextMapa);
+    } else {
+      console.error(`Map not found for idMapaParaOndeSeraLevado: ${idMapaParaOndeSeraLevado}`);
+    }
+   }
 
   return (
     <ImageBackground source={profileImageUri} style={GlobalStyles.backgroundImage}>
@@ -49,10 +59,13 @@ export default function MainGame() {
           subtitle={mapaAtual['descriptionMapa']}
         />
 
-        <Button2 title={mapaAtual['opcao1']['descriptionOpcao1']} irParaPagina={() => {}} />
         <Button2
-          title={mapaAtual['opcao2']['descriptionOpcao2']}
-          irParaPagina={() => {}}
+          title={mapaAtual['opcao1'] ? mapaAtual['opcao1']['descriptionOpcao1'] : ''}
+          irParaPagina={() => updateMapaAtual(mapaAtual['opcao1']['idMapaParaOndeSeraLevado1'])}
+        />
+        <Button2
+          title={mapaAtual['opcao2'] ? mapaAtual['opcao2']['descriptionOpcao2'] : ''}
+          irParaPagina={() => { updateMapaAtual(mapaAtual['opcao2']['idMapaParaOndeSeraLevado2']) }}
         />
       </View>
     </ImageBackground>

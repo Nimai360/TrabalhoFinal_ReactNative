@@ -4,11 +4,17 @@ import { styles } from "./styles";
 import { GlobalStyles } from "../../global/styles";
 import Skill from "../../components/skill";
 import { getFotoPersonagensAPI } from "../../services/requestUser";
+import { getAsyncStorage } from "../../services/asyncStorage";
+import { useCharacterContext } from "../../context/characterContext";
 
 export default function Character() {
   const [profileImageUri, setProfileImageUri] = useState({ uri: "" });
+  const [user, setUser] = useState({});
+  // const [qtPontos, setQtPontos] = useState(100);
+  const { qtPontos } = useCharacterContext();
 
   useEffect(() => {
+    loadUserFromAsync();
     loadFoto();
   }, []);
 
@@ -19,11 +25,21 @@ export default function Character() {
           setProfileImageUri({ uri: response["ladrao"] });
         } else {
           console.error("Usuário não encontrado");
-        }
+        } 
       })
       .catch((error) => {
         console.error("Erro inesperado:", error);
       });
+  }
+  function loadUserFromAsync() {
+    getAsyncStorage("user")
+      .then(value => {
+        value = value+'';
+        var parsedValue = JSON.parse(value);
+  
+        setUser(parsedValue);
+      })
+      .catch(e => console.error('Erro ao recuperar os dados:', e));
   }
 
   return (
@@ -32,8 +48,8 @@ export default function Character() {
         <View style={styles.AvatarDiv}>
           <Image style={styles.fotoAvatarDiv} source={profileImageUri} />
         </View>
-        <Text style={styles.title}>CAPYBARA</Text>
-        <Text style={styles.pointsSkill}>100</Text>
+        <Text style={styles.title}>{user['username']}</Text>
+        <Text style={styles.pointsSkill}>{qtPontos}</Text>
       </View>
       <View style={styles.divider}></View>
 
