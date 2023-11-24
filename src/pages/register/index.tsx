@@ -25,23 +25,24 @@ export default function Register() {
   }
 
   function handleWaitScreen(usuario: string, email: string, senha: string) {
-    postUsuarioAPI(usuario, email, senha)
-      .then((response) => {
-        if (response !== null) {
-          setAsyncStorage('user', response);
-          setAsyncStorage(`${email}-Pontos`, 10);
-          navigation.navigate("StackMainGame");
-        } else {
-          console.error("Erro ao entrar no jogo");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro inesperado:", error);
-      })
-      .finally(() => {
-        loadUserPointsFromAsync(email);
-      }
-      );
+    if (usuario != "" && email != "" && senha != "") {
+      postUsuarioAPI(usuario, email, senha)
+        .then((response) => {
+          if (response !== null) {
+            setAsyncStorage("user", response);
+            setAsyncStorage(`${email}-Pontos`, 10);
+            navigation.navigate("StackMainGame");
+          } else {
+            console.error("Erro ao entrar no jogo");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro inesperado:", error);
+        })
+        .finally(() => {
+          loadUserPointsFromAsync(email);
+        });
+    }
   }
 
   return (
@@ -88,4 +89,3 @@ export default function Register() {
 function loadUserPointsFromAsync(email: string) {
   throw new Error("Function not implemented.");
 }
-

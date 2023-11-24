@@ -21,6 +21,7 @@ export default function MainGame() {
   const [mapaAtual, setMapaAtual] = useState([]);
   const [faseAtual, setFaseAtual] = useState(1);
   const [snackVisible, setSnackVisible] = useState(false);
+  const [snackVisibleDificl, setSnackVisibleDificl] = useState(false);
 
   const { qtPontos, setQtPontos } = useCharacterContext();
 
@@ -59,7 +60,7 @@ export default function MainGame() {
               const numeroDeElementos = Object.keys(response).length;
 
               if (numeroDeElementos < 2) {
-
+                setSnackVisibleDificl(true);
               } else {
                 proximoMapa(opcaoEscolhida);
               }
@@ -134,6 +135,20 @@ export default function MainGame() {
           },
         }}>
         Parabéns, aventureiro! Sua bravura lhe fez ganhar 5 pontos para usar em suas Skills!
+      </Snackbar>
+      <Snackbar
+        visible={snackVisibleDificl}
+        duration={5000}
+        onDismiss={() => setSnackVisible(false)}
+        style={styles.snackbar}
+        action={{
+          label: 'X',
+          onPress: () => {
+            // Do something
+            setSnackVisible(false)
+          },
+        }}>
+        Caro aventureiro, este mapa é muito difícil pro seu nível. Aguarde mais alguém chegar neste mapa.
       </Snackbar>
     </ImageBackground>
   );

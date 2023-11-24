@@ -18,6 +18,8 @@ export default function Character() {
   const [qtMagia, setQtMagia] = useState(0);
   const [qtSorte, setQtSorte] = useState(0);
   const [qtInteligencia, setQtInteligencia] = useState(0);
+  const [qtTotal, setQtTotal] = useState(0);
+  
   const qtForcaRef = useRef();
   const qtStaminaRef = useRef();
   const qtDefesaRef = useRef();
@@ -27,7 +29,6 @@ export default function Character() {
   const qtSorteRef = useRef();
   const qtInteligenciaRef = useRef();
   const qtTotalRef = useRef();
-  const [qtTotal, setQtTotal] = useState(0);
 
 
   const { qtPontos, setQtPontos } = useCharacterContext();
@@ -188,7 +189,7 @@ export default function Character() {
     getFotoPersonagensAPI()
       .then((response) => {
         if (response !== null) {
-          setProfileImageUri({ uri: response["ladrao"] });
+          setProfileImageUri({ uri: response["guerreiro"] });
         } else {
           console.error("Usuário não encontrado");
         }
@@ -342,7 +343,7 @@ export default function Character() {
           <Image style={styles.fotoAvatarDiv} source={profileImageUri} />
         </View>
         <Text style={styles.title}>{user['username']}</Text>
-        <Text style={styles.pointsSkill}>{qtPontos}</Text>
+        <Text style={styles.pointsSkill}>{qtTotal}</Text>
       </View>
       <View style={styles.divider}></View>
 

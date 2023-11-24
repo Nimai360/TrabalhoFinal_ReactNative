@@ -25,40 +25,41 @@ export default function Login() {
 
   function loadUserPointsFromAsync(email) {
     getAsyncStorage(`${email}-Pontos`)
-      .then(value => {
-        value = value+'';
+      .then((value) => {
+        value = value + "";
         var parsedValue = JSON.parse(value);
         // console.log(parsedValue);
 
-        if(parsedValue == undefined || parsedValue == null){
-          console.log('Pontos são undefined');
+        if (parsedValue == undefined || parsedValue == null) {
+          console.log("Pontos são undefined");
           // setAsyncStorage(`${email}-Pontos`, 10);
         }
-  
+
         return parsedValue;
       })
-      .catch(e => 
-        console.error('login - Erro ao recuperar os dados:', e)
-        );
+      .catch((e) => console.error("login - Erro ao recuperar os dados:", e));
   }
 
   function handleWaitScreen(email: string, senha: string) {
     // email = "nimai@nimai";
     // senha = "123456";
-    getUsuarioAPI(email, senha)
-      .then((response) => {
-        if (response !== null) {
-          setAsyncStorage('user', response);
-          loadUserPointsFromAsync(email);
+    if (email != "" && senha != "") {
+      getUsuarioAPI(email, senha)
+        .then((response) => {
+          console.log(response);
+          if (response !== null) {
+            setAsyncStorage("user", response);
+            loadUserPointsFromAsync(email);
 
-          navigation.navigate("StackMainGame");
-        } else {
-          console.error("Usuário não encontrado");
-        }
-      })
-      .catch((error) => {
-        console.error("Erro inesperado:", error);
-      });
+            navigation.navigate("StackMainGame");
+          } else {
+            console.error("Usuário não encontrado");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro inesperado:", error);
+        });
+    }
   }
 
   return (
