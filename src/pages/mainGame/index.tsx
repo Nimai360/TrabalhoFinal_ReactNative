@@ -7,6 +7,9 @@ import { getMapaAPI, getUsuariosNoMapaAPI, putUsuarioAPI } from "../../services/
 
 import { Button2 } from "../../components/button2";
 import { useCharacterContext } from "../../context/characterContext";
+import { getAsyncStorage, setAsyncStorage } from "../../services/asyncStorage";
+import { Snackbar } from "react-native-paper";
+import { styles } from "./styles";
 
 var profileImageUri = {
   //   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
@@ -16,6 +19,8 @@ var profileImageUri = {
 export default function MainGame() {
   const [mapa, setMapa] = useState([]);
   const [mapaAtual, setMapaAtual] = useState([]);
+  const [faseAtual, setFaseAtual] = useState(1);
+  const [snackVisible, setSnackVisible] = useState(false);
 
   const { qtPontos, setQtPontos } = useCharacterContext();
 
@@ -49,43 +54,53 @@ export default function MainGame() {
 
       if (opcaoEscolhida['batalha'] == 'dificil') {
         getUsuariosNoMapaAPI(mapaAtual['idMapa'])
-        .then((response) => {
-          if (response !== null) {
-            console.log("length: " + (response.length) );
-            console.log("passou");
-            if (Array.isArray(response) && response.length < 2 ){
+          .then((response) => {
+            if (response !== null) {
+              const numeroDeElementos = Object.keys(response).length;
 
-            } else {
-              if (opcaoEscolhida['ganhaPontos']) {
-                setQtPontos(qtPontos + 5);
-              }
-              const nextMapa = mapa.find(map => map.idMapa === opcaoEscolhida['idMapaParaOndeSeraLevado']);
-              if (nextMapa) {
-                setMapaAtual(nextMapa);
-                putUsuarioAPI('nimai@nimai', true, opcaoEscolhida['idMapaParaOndeSeraLevado'])
+              if (numeroDeElementos < 2) {
+
               } else {
-                console.error(`Map not found for idMapaParaOndeSeraLevado: ${opcaoEscolhida['idMapaParaOndeSeraLevado']}`);
+                proximoMapa(opcaoEscolhida);
               }
             }
-          }
-        })
-        .catch((error) => {
-          console.error("Erro inesperado:", error);
-        });
+          })
+          .catch((error) => {
+            console.error("Erro inesperado:", error);
+          });
       }
     } else {
-      if (opcaoEscolhida['ganhaPontos']) {
-        setQtPontos(qtPontos + 5);
-      }
-      const nextMapa = mapa.find(map => map.idMapa === opcaoEscolhida['idMapaParaOndeSeraLevado']);
-      if (nextMapa) {
-        setMapaAtual(nextMapa);
-        putUsuarioAPI('nimai@nimai', true, opcaoEscolhida['idMapaParaOndeSeraLevado'])
-      } else {
-        console.error(`Map not found for idMapaParaOndeSeraLevado: ${opcaoEscolhida['idMapaParaOndeSeraLevado']}`);
-      }
+      proximoMapa(opcaoEscolhida);
     }
   }
+
+  function proximoMapa(opcaoEscolhida){
+    var pontos = 0
+    if (opcaoEscolhida['ganhaPontos']) {
+      setSnackVisible(true);
+      pontos = qtPontos + 5
+      setQtPontos(pontos);
+    }
+    const nextMapa = mapa.find(map => map.idMapa === opcaoEscolhida['idMapaParaOndeSeraLevado']);
+    if (nextMapa) {
+      setFaseAtual(faseAtual + 1);
+      setMapaAtual(nextMapa);
+
+      getAsyncStorage('user')
+        .then(value => {
+          var usuario = JSON.parse(value + '')
+          putUsuarioAPI(usuario['email'], true, opcaoEscolhida['idMapaParaOndeSeraLevado'])
+          setAsyncStorage(`${usuario['email']}-Pontos`, pontos);
+        })
+        .catch(e => console.error('Erro ao recuperar os dados:', e));
+
+
+    } else {
+      // console.error(`Map not found for idMapaParaOndeSeraLevado: ${opcaoEscolhida['idMapaParaOndeSeraLevado']}`);
+    }
+  }
+
+
 
   return (
     <ImageBackground source={profileImageUri} style={GlobalStyles.backgroundImage}>
@@ -93,7 +108,7 @@ export default function MainGame() {
         <GoBackArrow />
 
         <Title_Subtitle
-          title={`FASE ${mapaAtual['idMapa']}`}
+          title={`Mapa ${faseAtual}`}
           subtitle={mapaAtual['descriptionMapa']}
         />
 
@@ -106,6 +121,20 @@ export default function MainGame() {
           irParaPagina={() => { updateMapaAtual(mapaAtual['opcao2']) }}
         />
       </View>
+      <Snackbar
+        visible={snackVisible}
+        duration={5000}
+        onDismiss={() => setSnackVisible(false)}
+        style={styles.snackbar}
+        action={{
+          label: 'X',
+          onPress: () => {
+            // Do something
+            setSnackVisible(false)
+          },
+        }}>
+        Parabéns, aventureiro! Sua bravura lhe fez ganhar 5 pontos para usar em suas Skills!
+      </Snackbar>
     </ImageBackground>
   );
 }

@@ -35,7 +35,7 @@ function loadUserPointsFromAsync(email) {
         .then(value => {
             value = value + '';
             const parsedValue = JSON.parse(value);
-            // console.log('ContextPoints - ' + parsedValue);
+            console.log('ContextPoints - ' + parsedValue);
 
             return parsedValue;
         })

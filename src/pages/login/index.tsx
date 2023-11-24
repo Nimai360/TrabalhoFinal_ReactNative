@@ -43,8 +43,8 @@ export default function Login() {
   }
 
   function handleWaitScreen(email: string, senha: string) {
-    email = "nimai@nimai";
-    senha = "123456";
+    // email = "nimai@nimai";
+    // senha = "123456";
     getUsuarioAPI(email, senha)
       .then((response) => {
         if (response !== null) {
@@ -91,21 +91,6 @@ export default function Login() {
 
         {/* <Button2 title="Entrar" irParaPagina={handleEnterGame} /> */}
       </View>
-
-      {/* <Snackbar
-        visible={true}
-        onDismiss={() => {}}
-        action={{
-          label: "Dismiss",
-          onPress: () => {
-            // Do side magic
-          },
-        }}
-        duration={2000}
-        style={styles.snackbar}
-      >
-        dsdsd
-      </Snackbar> */}
 
       <Rodape_link
         text="Não possui conta?"

@@ -10,17 +10,28 @@ export function setAsyncStorage(key: string, value: any) {
     storeData();
 }
 
-export function getAsyncStorage(key: string) {
-    const retrieveData = () => {
-        return AsyncStorage.getItem(key)
-            .then(value => {
-                if (value !== null) {
-                    return value;
-                }
-            })
-            .catch(e => console.error('Erro ao recuperar os dados:', e));
-    };
-    return retrieveData();
+// export function getAsyncStorage(key: string) {
+//     const retrieveData = () => {
+//         return AsyncStorage.getItem(key)
+//             .then(value => {
+//                 if (value !== null) {
+//                     return value;
+//                 }
+//             })
+//             .catch(e => console.error('Erro ao recuperar os dados:', e));
+//     };
+//     return retrieveData();
+// }
+export function getAsyncStorage(key) {
+    return new Promise((resolve, reject) => {
+        AsyncStorage.getItem(key, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
 }
 
 // COMO CHAMAR A FUNÇÃO getAsyncStorage

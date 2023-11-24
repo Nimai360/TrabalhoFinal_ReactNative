@@ -37,7 +37,11 @@ export default function Register() {
       })
       .catch((error) => {
         console.error("Erro inesperado:", error);
-      });
+      })
+      .finally(() => {
+        loadUserPointsFromAsync(email);
+      }
+      );
   }
 
   return (
@@ -81,3 +85,7 @@ export default function Register() {
     </ImageBackground>
   );
 }
+function loadUserPointsFromAsync(email: string) {
+  throw new Error("Function not implemented.");
+}
+

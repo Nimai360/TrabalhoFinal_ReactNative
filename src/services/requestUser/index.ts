@@ -27,7 +27,7 @@ export function getUsuarioAPI(email: string, password: string): Promise<any> {
 }
 
 export function getMapaAPI(): Promise<any> {    
-    const url = `mapa.json`;
+    const url = `mapa1.json`;
 
     return users.get(url)
         .then(response => {
@@ -47,7 +47,8 @@ export function getUsuariosNoMapaAPI(idMapa: number): Promise<any> {
 
     return users.get(url)
         .then(response => {
-            // console.log(response.data);
+            console.log('getUsuariosNoMapaAPI');
+            console.log(response.data);
             return response.data;
         })
         .catch(error => {
