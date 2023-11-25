@@ -9,6 +9,7 @@ import { Title_Subtitle } from "../../components/title_subtitle";
 import { Rodape_link } from "../../components/rodape_link";
 import { postUsuarioAPI } from "../../services/requestUser";
 import { setAsyncStorage } from "../../services/asyncStorage";
+import DropdownComponent from "../../components/dropdown";
 
 var profileImageUri = {
   uri: "https://w.forfun.com/fetch/69/69ca02e5467bfb3cec2fef714845ac6b.jpeg",
@@ -71,6 +72,7 @@ export default function Register() {
             type="password"
             onChangeText={(text) => setSenha(text)}
           />
+          <DropdownComponent/>
           <Button
             icon="sword"
             title="Cadastrar"

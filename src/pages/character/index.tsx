@@ -35,7 +35,6 @@ export default function Character() {
 
   useEffect(() => {
     loadUserFromAsync();
-    loadFoto();
     somarTotal();
   }, []);
 
@@ -51,6 +50,8 @@ export default function Character() {
         setUser(parsedValue);
 
         setUserSkillsPoints(parsedValue['email']);
+        console.log(parsedValue['classe']);
+        loadFoto(parsedValue['classe']);
         return loadUserPointsFromAsync(parsedValue['email']);
       })
       .then(points => {
@@ -185,11 +186,12 @@ export default function Character() {
       });
   }
 
-  function loadFoto() {
+  function loadFoto(classe) {
+    // classe = 'guerreiro';
     getFotoPersonagensAPI()
       .then((response) => {
         if (response !== null) {
-          setProfileImageUri({ uri: response["guerreiro"] });
+          setProfileImageUri({ uri: response[classe] });
         } else {
           console.error("Usuário não encontrado");
         }
@@ -343,7 +345,7 @@ export default function Character() {
           <Image style={styles.fotoAvatarDiv} source={profileImageUri} />
         </View>
         <Text style={styles.title}>{user['username']}</Text>
-        <Text style={styles.pointsSkill}>{qtTotal}</Text>
+        <Text style={styles.pointsSkill}>{qtPontos}</Text>
       </View>
       <View style={styles.divider}></View>
 
